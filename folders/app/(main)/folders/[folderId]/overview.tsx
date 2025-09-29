@@ -1,10 +1,12 @@
 'use client'
+import AIChatSidebar from '@/components/ai-chat-sidebar';
 import FileUpload from '@/components/fileupload';
 import NoteComponent from '@/components/notes';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { useChatStore } from '@/stores/chatStore';
 import { useFileStore } from '@/stores/fileStore';
 import { useFolderStore } from '@/stores/folderStore';
 import { useNotesStore } from '@/stores/notesStore';
@@ -23,6 +25,7 @@ function overview({folderId}:{folderId:string}) {
    
    const folder = folders.find((folder)=>folder.id === folderId)
    const {notes}=useNotesStore()
+   const {toggleSidebar,isSidebarOpen}=useChatStore()
    if(loading && !folder){
        return(
         <div className='flex items-center justify-center h-[600px] w-full'>
@@ -73,7 +76,7 @@ function overview({folderId}:{folderId:string}) {
           )}
         </div>
       </div>
-      <Button variant="outline" size="sm">
+      <Button variant="outline" size="sm" onClick={toggleSidebar}>
         <BrainIcon className="h-4 w-4" />
       </Button>
     </div>
@@ -135,6 +138,7 @@ function overview({folderId}:{folderId:string}) {
        <FileUpload folderId={folderId} />
       </TabsContent>
     </Tabs>
+    <AIChatSidebar folderId={folderId}/>
   </div>
   )
 }
