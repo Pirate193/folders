@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { FolderOpen, FileText, Brain, MessageSquare, Upload, Eye, Sparkles, BookOpen, CheckCircle2, ArrowRight } from "lucide-react";
+import { FolderOpen, FileText, Brain, MessageSquare, Upload, Sparkles, BookOpen, CheckCircle2, ArrowRight } from "lucide-react";
 
 export default function Home() {
   return (
@@ -252,8 +252,8 @@ export default function Home() {
                     <span className="text-2xl">⭐⭐⭐⭐⭐</span>
                   </div>
                   <p className="text-lg italic text-gray-300 group-hover:text-white transition-colors duration-300">
-                    "Folders completely changed how I study. The AI flashcard generator is a game-changer, 
-                    and having everything organized in one place saves me so much time!"
+                    &quot;Folders completely changed how I study. The AI flashcard generator is a game-changer, 
+                    and having everything organized in one place saves me so much time!&quot;
                   </p>
                   <div className="flex items-center gap-3 pt-4">
                     <div className="w-12 h-12 rounded-full bg-gradient-to-br from-white to-gray-400 group-hover:scale-110 transition-transform duration-300" />

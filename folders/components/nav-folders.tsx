@@ -2,7 +2,7 @@
 import {
   Folder,
   Forward,
-  LucideIcon,
+
   MoreHorizontal,
   Plus,
   Trash2,
@@ -58,6 +58,7 @@ const NavFolders = ({ folders }: { folders: FolderType[] }) => {
       setFoldertodelete(null)
          
      }catch(error){
+      console.error(error)
       toast.error('failed to delete folder ')
      }
   }

@@ -28,8 +28,8 @@ export async function GET(request:NextRequest){
             folderId:msg.folder_id
         })) || [];
         return NextResponse.json({transformedMessages})
-    }catch(error:any){
+    }catch(error){
         console.log(error)
-        return NextResponse.json({error:error.message},{status:500})
+        return NextResponse.json({error: error instanceof Error ? error.message : 'An error occurred'},{status:500})
     }
 }

@@ -84,6 +84,7 @@ const FlashcardViewerSRS = ({
         handleNext()
       }, 1000)
     } catch (error) {
+      console.error(error)
       toast.error('Failed to save review')
       setIsReviewing(false)
     }
@@ -228,7 +229,7 @@ const FlashcardViewerSRS = ({
                         Incorrect
                       </h3>
                       <p className="text-sm text-red-600 dark:text-red-500">
-                        Don't worry, keep practicing!
+                        Dont worry, keep practicing!
                       </p>
                     </div>
                   </>

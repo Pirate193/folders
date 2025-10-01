@@ -13,8 +13,7 @@ import {
   TrendingUp, 
   Plus,
   ArrowRight,
-  CheckCircle2,
-  Calendar
+  CheckCircle2
 } from 'lucide-react'
 import Link from 'next/link'
 import { formatNextReview } from '@/lib/srs-algorithm'
@@ -59,7 +58,7 @@ export default function Home() {
           <h1 className="text-3xl font-bold">Welcome back! {currentProfile?.username} </h1>
          
           <p className="text-muted-foreground mt-1">
-            Here's what's happening with your learning today
+            Here&apos;s what&apos;s happening with your learning today
           </p>
         </div>
         <Link href="/folders">

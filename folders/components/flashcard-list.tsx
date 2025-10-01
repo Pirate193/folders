@@ -4,14 +4,12 @@ import { useFlashcardStore } from '@/stores/flashcardStore'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/card'
 import { Button } from './ui/button'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from './ui/dropdown-menu'
-import { Plus, MoreVertical, Edit, Trash2, Play, Brain, Sparkles } from 'lucide-react'
+import { Plus, MoreVertical, Trash2, Play, Brain, Sparkles } from 'lucide-react'
 import { Skeleton } from './ui/skeleton'
 import FlashcardCreateDialog from './flashcard-create-dialog'
 import FlashcardAIGenerateDialog from './flashcard-ai-generate-dialog'
 import FlashcardViewerSRS from './flashcard-viewer-srs'
-import StudyDashboard from './study-dashboard'
 import { toast } from 'sonner'
-import { formatNextReview, calculateSuccessRate } from '@/lib/srs-algorithm'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -56,7 +54,7 @@ const FlashcardList = ({ folderId }: FlashcardListProps) => {
       toast.success('Flashcard deleted successfully')
       setDeleteDialogOpen(false)
       setFlashcardToDelete(null)
-    } catch (error) {
+    } catch {
       toast.error('Failed to delete flashcard')
     }
   }

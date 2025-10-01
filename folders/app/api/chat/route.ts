@@ -54,15 +54,15 @@ export async function POST(request: NextRequest) {
 
     if (notes && notes.length > 0) {
       folderContext += `The user has ${notes.length} notes in this folder:\n`;
-      notes.forEach((note: any) => {
+      notes.forEach((note: {title?: string; content?: string}) => {
         folderContext += `- ${note.title || "Untitled"}: ${note.content?.substring(0, 200)}...\n`;
       });
     }
     if (flashcards && flashcards.length > 0) {
       folderContext += `The user has ${flashcards.length} flashcards in this folder:\n`;
-      flashcards.forEach((flashcard: any) => {
+      flashcards.forEach((flashcard: {question: string; answers?: Array<{text: string}>; is_multiple_choice?: boolean}) => {
         // Extract answer texts from the JSONB array
-        const answerTexts = flashcard.answers?.map((ans: any) => ans.text).join(', ') || '';
+        const answerTexts = flashcard.answers?.map((ans) => ans.text).join(', ') || '';
         const answerPreview = answerTexts.length > 100 ? answerTexts.substring(0, 100) + '...' : answerTexts;
         const questionType = flashcard.is_multiple_choice ? '[Multiple Choice]' : '[Written Answer]';
         folderContext += `- ${questionType} ${flashcard.question}\n  Answers: ${answerPreview}\n`;
@@ -132,7 +132,7 @@ Remember: Your goal is not just to answer questions, but to help students become
     let conversationText = systemPrompt + "\n\n";
 
     // Add conversation history
-    conversationHistory.forEach((msg: any) => {
+    conversationHistory.forEach((msg: {role: string; content: string}) => {
       conversationText += `${msg.role === 'user' ? 'Student' : 'Assistant'}: ${msg.content}\n`;
     });
 

@@ -5,6 +5,7 @@ import { ArrowLeft, Download, ExternalLink } from 'lucide-react';
 import { useParams, useRouter } from 'next/navigation'
 import React, { useEffect } from 'react'
 import PDFViewer from '@/components/pdf-viewer'
+import Image from 'next/image';
 
 function FileViewPage() {
     const params = useParams();
@@ -44,9 +45,9 @@ function FileViewPage() {
                 )
             case 'image':
                 return(
-                    <img 
+                    <Image 
                     src={file.file_url}
-                    alt={file.file_name}
+                    alt={file.file_name || 'image'}
                     className='max-w-full h-[100vh] object-contain'
                     />
                 )

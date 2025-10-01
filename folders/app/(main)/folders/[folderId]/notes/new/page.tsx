@@ -5,27 +5,24 @@ import { useParams, useRouter } from 'next/navigation'
 import { useNotesStore } from '@/stores/notesStore'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
-import { ArrowLeft, Copy, Download, MoreVertical, Save, Trash2 } from 'lucide-react'
+import { ArrowLeft, Copy, Download, MoreVertical, Save } from 'lucide-react'
 import { useFolderStore } from '@/stores/folderStore'
 import Toolbar from '@/components/toolbar'
 import TiptapEditor from '@/components/editor'
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
-import DeleteDialog from '@/components/deleteDialog'
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 
 export default function NewNotePage() {
     const params = useParams()
   const router = useRouter()
   const folderId = params.folderId as string
   
-  const { createNote,currentNote,notes,deleteNote } = useNotesStore()
+  const { createNote } = useNotesStore()
   const { folders } = useFolderStore()
   
   const [title, setTitle] = useState('')
   const [content, setContent] = useState('')
   const [isSaving, setIsSaving] = useState(false)
-  const [isEditMode, setIsEditMode] = useState(true)
-    const [lastSaved, setLastSaved] = useState<Date | null>(null)
-const [showDeleteDialog,setShowDeleteDialog]=useState(false)
+  const [lastSaved] = useState<Date | null>(null)
   
   const folder = folders.find(f => f.id === folderId)
 

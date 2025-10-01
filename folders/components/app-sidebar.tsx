@@ -1,5 +1,5 @@
 'use client'
-import { Folder, FolderCheck, FolderIcon, HomeIcon, Search } from 'lucide-react'
+import { FolderCheck, FolderIcon, HomeIcon, Search } from 'lucide-react'
 import React, { useEffect } from 'react'
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader } from './ui/sidebar'
 import NavMain from './nav-main'
@@ -51,8 +51,8 @@ const data = {
     ]
 }
 const AppSidebar = ({...props}:React.ComponentProps<typeof Sidebar>) => {
-    const {folders,fetchFolders,loading,error}=useFolderStore();
-    const{fetchProfile,currentProfile,profile}=useProfileStore();
+    const {folders,fetchFolders}=useFolderStore();
+    const{fetchProfile,currentProfile}=useProfileStore();
 
     useEffect(()=>{
         fetchFolders();

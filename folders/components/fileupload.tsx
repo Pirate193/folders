@@ -124,7 +124,7 @@ function FileUpload({ folderId }: { folderId: string }) {
       case "pdf":
         return <FileText className="h-8 w-8 text-red-500" />;
       case "image":
-        return <Image className="h-8 w-8 text-blue-500" />;
+        return <Image className="h-8 w-8 text-blue-500" aria-label="Image file" />;
       case "doc":
         return <FileText className="h-8 w-8 text-blue-500" />;
       case "video":

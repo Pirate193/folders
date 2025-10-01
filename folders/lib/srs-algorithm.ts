@@ -41,8 +41,6 @@ export function calculateNextReview(
     throw new Error('Quality must be between 0 and 5');
   }
 
-  const wasCorrect = quality >= 3;
-
   // If quality < 3, reset the card (failed review)
   if (quality < 3) {
     const newEaseFactor = Math.max(1.3, currentEaseFactor - 0.2);

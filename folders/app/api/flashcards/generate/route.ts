@@ -233,7 +233,7 @@ function parseFlashcardsFromResponse(response: string): GeneratedFlashcard[] {
         Array.isArray(fc.answers) &&
         fc.answers.length > 0 &&
         fc.answers.every(
-          (ans: any) =>
+          (ans: {text: string; isCorrect: boolean}) =>
             ans.text &&
             typeof ans.text === "string" &&
             typeof ans.isCorrect === "boolean"

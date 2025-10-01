@@ -179,7 +179,7 @@ const FlashcardViewer = ({
                         Incorrect
                       </h3>
                       <p className="text-sm text-red-600 dark:text-red-500">
-                        Don't worry, keep practicing!
+                        Dont worry, keep practicing!
                       </p>
                     </div>
                   </>

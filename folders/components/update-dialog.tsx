@@ -17,7 +17,7 @@ type Props = {
     onSuccess?: () => void
 }
 
-const UpdateDialog = ({ trigger, folder, onSuccess }: Props) => {
+const UpdateDialog = ({ trigger, folder, onSuccess }: Props)  => {
     const { updateFolder, loading, error, clearError } = useFolderStore();
     const [open, setOpen] = useState(false);
     const [form, setForm] = useState({
@@ -46,7 +46,7 @@ const UpdateDialog = ({ trigger, folder, onSuccess }: Props) => {
             toast.error('Folder name is required');
             return;
         }
-    
+      
         try {
             await updateFolder(folder.id, {
                 name: form.name.trim(),
@@ -58,6 +58,7 @@ const UpdateDialog = ({ trigger, folder, onSuccess }: Props) => {
             setOpen(false);
             onSuccess?.();
         } catch (err) {
+          console.error(err);
             toast.error('Failed to update folder');
         }
     };

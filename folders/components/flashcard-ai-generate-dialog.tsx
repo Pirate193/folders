@@ -114,7 +114,7 @@ const FlashcardAIGenerateDialog = ({ open, onOpenChange, folderId }: FlashcardAI
               disabled={isGenerating}
             />
             <p className="text-xs text-muted-foreground">
-              Enter the subject or topic you want to study
+              Enter the subject or topic you want to study 
             </p>
           </div>
 
@@ -197,7 +197,7 @@ const FlashcardAIGenerateDialog = ({ open, onOpenChange, folderId }: FlashcardAI
               <p className="text-sm font-medium">Powered by Gemini AI</p>
               <p className="text-xs text-muted-foreground">
                 AI will generate {numberOfFlashcards} {isMultipleChoice ? 'multiple choice' : 'written answer'} 
-                {' '}flashcard{numberOfFlashcards !== 1 ? 's' : ''} about "{topic || 'your topic'}"
+                {' '}flashcard{numberOfFlashcards !== 1 ? 's' : ''} about {topic || 'your topic'}
                 {description && (
                   <span className="block mt-1">
                     <span className="font-medium">Focus:</span> {description}

@@ -4,11 +4,11 @@ import React, { useEffect, useState } from 'react'
 import { Button } from './ui/button';
 import { ScrollArea } from './ui/scroll-area';
 import MessageBubble from './messageBubble';
-import { Input } from './ui/input';
+
 import { Textarea } from './ui/textarea';
 
 const AIChatSidebar = ({folderId}:{folderId:string}) => {
-  const {messages,loadMessagesForFolder,addMessage,isLoading,isSidebarOpen,currentFolderId,setSidebarOpen,setCurrentFolderId,setLoading}=useChatStore();
+  const {messages,loadMessagesForFolder,addMessage,isLoading,isSidebarOpen,currentFolderId,setSidebarOpen,setLoading}=useChatStore();
   const [input, setInput] = useState('');
 
   // useEffect(()=>{
@@ -101,7 +101,7 @@ const AIChatSidebar = ({folderId}:{folderId:string}) => {
                   Welcome to your AI Study Assistant
                 </h3>
                 <p className='text-sm text-muted-foreground' >
-                  I'm here to help you with your studies. 
+                  Im here to help you with your studies. 
                 </p>
                 <div className='text-xs space-y-1' >
                 <p>.Ask me anything about your folder, notes, and files.</p>

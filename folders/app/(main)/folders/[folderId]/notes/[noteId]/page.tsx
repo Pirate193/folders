@@ -29,14 +29,12 @@ function NotesPage() {
         deleteNote,
         fetchnotesByfolder,
         loading,
-        createNote,
       } = useNotesStore()
       const { folders } = useFolderStore()
        const folder = folders.find(f => f.id === folderId)
        const [title, setTitle] = useState('')
        const [content, setContent] = useState('')
        const [isSaving, setIsSaving] = useState(false)
-     const [isEditMode, setIsEditMode] = useState(true)
        const [lastSaved, setLastSaved] = useState<Date | null>(null)
   const [showDeleteDialog,setShowDeleteDialog]=useState(false)
   const debouncedTitle = useDebounce(title, 1500)
@@ -61,6 +59,7 @@ function NotesPage() {
         (debouncedTitle || debouncedContent)) {
       handleAutoSave()
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debouncedTitle, debouncedContent])
 
   const handleAutoSave = async () => {

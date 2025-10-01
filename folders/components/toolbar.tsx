@@ -1,13 +1,13 @@
 'use client'
 import { AlignCenterIcon, AlignJustifyIcon, AlignLeftIcon, AlignRightIcon, BoldIcon, ChevronDownIcon, CodeIcon, HighlighterIcon, ItalicIcon, LinkIcon, ListIcon, ListTodoIcon, LucideIcon, PrinterIcon, RedoIcon, RemoveFormattingIcon, SpellCheckIcon, StrikethroughIcon, UnderlineIcon, Undo2Icon} from 'lucide-react';
-import {CirclePicker, SketchPicker, type ColorResult,} from 'react-color'
+import { SketchPicker, type ColorResult,} from 'react-color'
 import React, { useState } from 'react'
 import { Button } from './ui/button';
 import { cn } from '@/lib/utils';
 import { useEditorStore } from '@/stores/use-editorstore';
 import { Level } from '@tiptap/extension-heading';
 import { Separator } from './ui/separator';
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel,DropdownMenuSeparator, DropdownMenuTrigger } from './ui/dropdown-menu';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from './ui/dropdown-menu';
 import { Input } from './ui/input';
 
 const ListButton = ()=>{

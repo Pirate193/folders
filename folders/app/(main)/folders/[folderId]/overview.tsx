@@ -16,8 +16,8 @@ import { ArrowLeft, BrainIcon, Folder, Link } from 'lucide-react';
 import React, { useEffect } from 'react'
 import StudyDashboard from '@/components/study-dashboard';
 
-function overview({folderId}:{folderId:string}) {
-    const { folders, currentFolder, setCurrentFolder, fetchFolders, loading } =useFolderStore();
+function Overview({folderId}:{folderId:string}) {
+    const { folders, setCurrentFolder, fetchFolders, loading } =useFolderStore();
     const {files,fetchFiles}=useFileStore()
     const {flashcards,fetchFlashcardsByFolder}=useFlashcardStore()
    useEffect(()=>{
@@ -25,16 +25,18 @@ function overview({folderId}:{folderId:string}) {
         fetchFolders()
     }
     setCurrentFolder(folderId)
+   // eslint-disable-next-line react-hooks/exhaustive-deps
    },[folderId,fetchFolders,setCurrentFolder])
    useEffect(()=>{
        fetchFiles(folderId)
        fetchFlashcardsByFolder(folderId)
        fetchnotesByfolder(folderId)
+   // eslint-disable-next-line react-hooks/exhaustive-deps
    },[])
    
    const folder = folders.find((folder)=>folder.id === folderId)
    const {notes,fetchnotesByfolder}=useNotesStore()
-   const {toggleSidebar,isSidebarOpen}=useChatStore()
+   const {toggleSidebar}=useChatStore()
    if(loading && !folder){
        return(
         <div className='flex items-center justify-center h-[600px] w-full'>
@@ -52,7 +54,7 @@ function overview({folderId}:{folderId:string}) {
             Folder not found
           </h3>
           <p className="text-gray-500 mb-4">
-            The folder you're looking for doesn't exist or you don't have access
+            The folder you&apos;re looking for doesn&apos;t exist or you don&apos;t have access
             to it.
           </p>
           <Link href="/folders">
@@ -159,4 +161,4 @@ function overview({folderId}:{folderId:string}) {
   )
 }
 
-export default overview
+export default Overview

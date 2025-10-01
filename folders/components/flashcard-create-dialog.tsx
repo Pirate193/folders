@@ -115,6 +115,7 @@ const FlashcardCreateDialog = ({ open, onOpenChange, folderId }: FlashcardCreate
       toast.success('Flashcard created successfully!')
       handleClose()
     } catch (error) {
+      console.error(error)
       toast.error('Failed to create flashcard')
     }
   }

@@ -13,7 +13,7 @@ import { formatDistanceToNow } from 'date-fns';
 import UpdateDialog from './update-dialog';
 
 const FolderComponent = () => {
-    const { folders, fetchFolders,updateFolder, loading, error,deleteFolder } = useFolderStore()
+    const { folders, fetchFolders, loading, error,deleteFolder } = useFolderStore()
   
     const [opendeleteDialog,setOpenDeleteDialog]=useState(false);
     const [folderTodelete,setFolderTodelete]=useState<string|null>();
