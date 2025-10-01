@@ -97,10 +97,13 @@ const FolderComponent = () => {
               <Card key={folder.id} className="group hover:shadow-lg transition-shadow cursor-pointer">
                 <CardHeader className="pb-3">
                   <div className="flex items-start justify-between">
-                    <div className="flex items-center gap-2">
-                      <Folder className="h-5 w-5 text-blue-600" />
+                    <div className="flex items-center gap-2 min-w-0 flex-1">
+                      <Folder className="h-5 w-5" />
+                      <div className="min-w-0 flex-1">
                       <CardTitle className="text-lg truncate">{folder.name}</CardTitle>
+                      </div>
                     </div>
+                    <div className="flex-shrink-0 ml-2" >
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
                         <Button
@@ -135,6 +138,7 @@ const FolderComponent = () => {
                         </DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>
+                    </div>
                   </div>
                   {folder.description && (
                     <CardDescription className="text-sm line-clamp-2">

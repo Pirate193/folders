@@ -5,6 +5,7 @@ import { Button } from './ui/button';
 import { ScrollArea } from './ui/scroll-area';
 import MessageBubble from './messageBubble';
 import { Input } from './ui/input';
+import { Textarea } from './ui/textarea';
 
 const AIChatSidebar = ({folderId}:{folderId:string}) => {
   const {messages,loadMessagesForFolder,addMessage,isLoading,isSidebarOpen,currentFolderId,setSidebarOpen,setCurrentFolderId,setLoading}=useChatStore();
@@ -136,8 +137,8 @@ const AIChatSidebar = ({folderId}:{folderId:string}) => {
       </ScrollArea>
      {/* input */}
      <div className='p-4 border-t bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60' >
-      <div className='flex gap-2' >
-        <Input 
+      <div className='flex gap-2 items-center' >
+        <Textarea 
         value={input}
         onChange={(e)=>setInput(e.target.value)}
         placeholder='Ask me anything...'

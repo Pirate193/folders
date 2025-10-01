@@ -6,6 +6,7 @@ import NavMain from './nav-main'
 import NavFolders from './nav-folders'
 import NavUser from './nav-user'
 import { useFolderStore } from '@/stores/folderStore'
+import { useProfileStore } from '@/stores/profileStore'
 
 //dummy data
 const data = {
@@ -51,10 +52,14 @@ const data = {
 }
 const AppSidebar = ({...props}:React.ComponentProps<typeof Sidebar>) => {
     const {folders,fetchFolders,loading,error}=useFolderStore();
+    const{fetchProfile,currentProfile,profile}=useProfileStore();
 
     useEffect(()=>{
         fetchFolders();
     },[fetchFolders])
+    useEffect(()=>{
+        fetchProfile();
+    },[fetchProfile])
   return (
     <Sidebar collapsible='icon' {...props} >
        <SidebarHeader>
@@ -67,7 +72,18 @@ const AppSidebar = ({...props}:React.ComponentProps<typeof Sidebar>) => {
             <NavFolders folders={folders}/>
        </SidebarContent>
        <SidebarFooter>
-           <NavUser user={data.user} />
+           <NavUser user={currentProfile ?
+           {
+            username:currentProfile.username,
+            email:currentProfile.email,
+            avatar_url:currentProfile.avatar_url
+           }:
+           {
+           username:'',
+           email:'',
+             avatar_url:'',
+           }
+        } />
        </SidebarFooter>
     </Sidebar>
   )

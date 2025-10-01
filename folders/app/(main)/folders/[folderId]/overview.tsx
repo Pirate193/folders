@@ -1,6 +1,7 @@
 'use client'
 import AIChatSidebar from '@/components/ai-chat-sidebar';
 import FileUpload from '@/components/fileupload';
+import FlashcardList from '@/components/flashcard-list';
 import NoteComponent from '@/components/notes';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -10,21 +11,29 @@ import { useChatStore } from '@/stores/chatStore';
 import { useFileStore } from '@/stores/fileStore';
 import { useFolderStore } from '@/stores/folderStore';
 import { useNotesStore } from '@/stores/notesStore';
+import { useFlashcardStore } from '@/stores/flashcardStore';
 import { ArrowLeft, BrainIcon, Folder, Link } from 'lucide-react';
 import React, { useEffect } from 'react'
+import StudyDashboard from '@/components/study-dashboard';
 
 function overview({folderId}:{folderId:string}) {
     const { folders, currentFolder, setCurrentFolder, fetchFolders, loading } =useFolderStore();
-    const {files}=useFileStore()
+    const {files,fetchFiles}=useFileStore()
+    const {flashcards,fetchFlashcardsByFolder}=useFlashcardStore()
    useEffect(()=>{
     if(!folders.length){
         fetchFolders()
     }
     setCurrentFolder(folderId)
    },[folderId,fetchFolders,setCurrentFolder])
+   useEffect(()=>{
+       fetchFiles(folderId)
+       fetchFlashcardsByFolder(folderId)
+       fetchnotesByfolder(folderId)
+   },[])
    
    const folder = folders.find((folder)=>folder.id === folderId)
-   const {notes}=useNotesStore()
+   const {notes,fetchnotesByfolder}=useNotesStore()
    const {toggleSidebar,isSidebarOpen}=useChatStore()
    if(loading && !folder){
        return(
@@ -109,7 +118,7 @@ function overview({folderId}:{folderId:string}) {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">0</div>
+                <div className="text-2xl font-bold">{flashcards.length}</div>
                 <p className="text-xs text-muted-foreground">cards</p>
               </CardContent>
             </Card>
@@ -124,6 +133,13 @@ function overview({folderId}:{folderId:string}) {
               </CardContent>
             </Card>
           </div>
+
+          {/* Study Dashboard - Full Width */}
+          {flashcards.length > 0 && (
+            <div className="mt-6">
+              <StudyDashboard folderId={folderId} />
+            </div>
+          )}
       </TabsContent>
       {/*  notes  */}
       <TabsContent value="notes">
@@ -131,7 +147,7 @@ function overview({folderId}:{folderId:string}) {
       </TabsContent>
       {/* flashcards */}
       <TabsContent value="flashcards">
-
+        <FlashcardList folderId={folderId} />
       </TabsContent>
       {/* files */}
       <TabsContent value="files">

@@ -1,19 +1,21 @@
 'use client'
-import React from 'react'
+import React, { useState } from 'react'
 import { SidebarMenu, SidebarMenuButton, SidebarMenuItem, useSidebar } from './ui/sidebar'
 import { DropdownMenu, DropdownMenuTrigger } from '@radix-ui/react-dropdown-menu'
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar'
 import { BadgeCheck, Bell, ChevronsUpDown, CreditCard, LogOut, Sparkles } from 'lucide-react'
 import { DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator } from './ui/dropdown-menu'
+import AccountDialog from './account-dialog'
 
 const NavUser = ({user}:{
     user:{
-        name:string
+        username:string
         email:string
-        avatar:string
+        avatar_url:string
     }
 }) => {
     const {isMobile} = useSidebar()
+    const [accountDialogOpen, setAccountDialogOpen] = useState(false)
   return (
     <SidebarMenu>
     <SidebarMenuItem>
@@ -24,11 +26,11 @@ const NavUser = ({user}:{
             className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
           >
             <Avatar className="h-8 w-8 rounded-lg">
-              <AvatarImage src={user.avatar} alt={user.name} />
+              <AvatarImage src={user.avatar_url} alt={user.username} />
               <AvatarFallback className="rounded-lg">CN</AvatarFallback>
             </Avatar>
             <div className="grid flex-1 text-left text-sm leading-tight">
-              <span className="truncate font-medium">{user.name}</span>
+              <span className="truncate font-medium">{user.username}</span>
               <span className="truncate text-xs">{user.email}</span>
             </div>
             <ChevronsUpDown className="ml-auto size-4" />
@@ -43,11 +45,11 @@ const NavUser = ({user}:{
           <DropdownMenuLabel className="p-0 font-normal">
             <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
               <Avatar className="h-8 w-8 rounded-lg">
-                <AvatarImage src={user.avatar} alt={user.name} />
+                <AvatarImage src={user.avatar_url} alt={user.username} />
                 <AvatarFallback className="rounded-lg">CN</AvatarFallback>
               </Avatar>
               <div className="grid flex-1 text-left text-sm leading-tight">
-                <span className="truncate font-medium">{user.name}</span>
+                <span className="truncate font-medium">{user.username}</span>
                 <span className="truncate text-xs">{user.email}</span>
               </div>
             </div>
@@ -61,7 +63,7 @@ const NavUser = ({user}:{
           </DropdownMenuGroup>
           <DropdownMenuSeparator />
           <DropdownMenuGroup>
-            <DropdownMenuItem>
+            <DropdownMenuItem onClick={() => setAccountDialogOpen(true)}>
               <BadgeCheck />
               Account
             </DropdownMenuItem>
@@ -82,6 +84,7 @@ const NavUser = ({user}:{
         </DropdownMenuContent>
       </DropdownMenu>
     </SidebarMenuItem>
+    <AccountDialog open={accountDialogOpen} onOpenChange={setAccountDialogOpen} />
   </SidebarMenu>
   )
 }

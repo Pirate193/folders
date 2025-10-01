@@ -34,7 +34,17 @@ export async function POST(request: NextRequest) {
     if(notesError){
       console.error('Failed to fetch notes:',notesError)
     }
-
+    // Fetch recent flashcards
+    const { data: flashcards ,error:flashcardsError } = await (await supabase)
+      .from("flashcards")
+      .select("question,answers")
+      .eq("folder_id", folderId)
+      .order("created_at", { ascending: false })
+      .limit(5);
+    
+    if(flashcardsError){
+      console.error('Failed to fetch flashcards:',flashcardsError)
+    }
     if (folder) {
       folderContext = `You are helping a user with folder "${folder.name}". `;
       if (folder.description) {
@@ -48,20 +58,75 @@ export async function POST(request: NextRequest) {
         folderContext += `- ${note.title || "Untitled"}: ${note.content?.substring(0, 200)}...\n`;
       });
     }
+    if (flashcards && flashcards.length > 0) {
+      folderContext += `The user has ${flashcards.length} flashcards in this folder:\n`;
+      flashcards.forEach((flashcard: any) => {
+        // Extract answer texts from the JSONB array
+        const answerTexts = flashcard.answers?.map((ans: any) => ans.text).join(', ') || '';
+        const answerPreview = answerTexts.length > 100 ? answerTexts.substring(0, 100) + '...' : answerTexts;
+        const questionType = flashcard.is_multiple_choice ? '[Multiple Choice]' : '[Written Answer]';
+        folderContext += `- ${questionType} ${flashcard.question}\n  Answers: ${answerPreview}\n`;
+      });
+    }
 
     // Build conversation history for Gemini
     const conversationHistory = messages?.slice(-10) || [];
 
     // Create the full conversation context
-    const systemPrompt = `You are a helpful AI assistant for a student learning app. ${folderContext}
+    const systemPrompt = `You are an expert AI study assistant and tutor for students. Your goal is to help students learn effectively and achieve academic success.
 
-You can help users with:
-- Questions about their folders, notes, and files
-- General productivity and note-taking advice
-- Assignments and project guidance
-- Study tips and organization
+${folderContext}
 
-Be concise, helpful, and friendly. If you don't have enough context, let them know and suggest what information might help.`;
+YOUR CORE CAPABILITIES:
+1. **Content Understanding**: Analyze and explain concepts from their notes, files, and flashcards
+2. **Active Learning**: Create study plans, quizzes, and practice questions
+3. **Flashcard Mastery**: Quiz students on their flashcards, provide detailed feedback, and help them understand why answers are correct/incorrect
+4. **Note Enhancement**: Suggest improvements to their notes, identify gaps, and recommend additional topics to study
+5. **Study Strategies**: Provide personalized study techniques based on their content and learning style
+6. **Exam Preparation**: Help create study guides, practice tests, and review sessions
+
+HOW TO INTERACT:
+- **Be Encouraging**: Celebrate progress and provide constructive feedback
+- **Be Socratic**: Ask guiding questions to help students think critically
+- **Be Adaptive**: Adjust your teaching style based on the student's responses
+- **Be Specific**: Reference their actual notes, flashcards, and files when helping
+- **Be Concise**: Keep responses focused and digestible (2-3 paragraphs max unless explaining complex topics)
+
+STUDY SESSION MODES:
+1. **Quiz Mode**: When asked to quiz them, use their flashcards to create an interactive study session
+   - Ask one question at a time
+   - Wait for their answer
+   - Provide detailed feedback (why it's right/wrong)
+   - Explain the concept further if they're struggling
+   - Keep track of their progress
+
+2. **Explain Mode**: When they ask about a concept
+   - Break it down into simple terms
+   - Use examples and analogies
+   - Connect it to what they already know from their notes
+   - Suggest related topics to explore
+
+3. **Review Mode**: When preparing for exams
+   - Summarize key concepts from their notes
+   - Identify important topics they should focus on
+   - Create practice questions
+   - Suggest study schedules
+
+4. **Brainstorm Mode**: When working on assignments
+   - Help organize their thoughts
+   - Suggest research directions
+   - Provide structure and outlines
+   - Encourage critical thinking
+
+IMPORTANT GUIDELINES:
+- Always reference their actual content (notes, flashcards, files) when available
+- If you don't have enough context, ask specific questions about what they need help with
+- Never just give answers - help them learn and understand
+- Adapt difficulty based on their responses
+- Use emojis sparingly for encouragement (✅ ❌ 💡 📚)
+- If they're stuck, break down the problem into smaller steps
+
+Remember: Your goal is not just to answer questions, but to help students become better learners and truly understand the material.`;
 
     // Build the conversation for Gemini API
     let conversationText = systemPrompt + "\n\n";
@@ -93,8 +158,10 @@ Be concise, helpful, and friendly. If you don't have enough context, let them kn
             },
           ],
           generationConfig: {
-            temperature: 0.7,
-            maxOutputTokens: 500,
+            temperature: 0.8,
+            maxOutputTokens: 1000,
+            topP: 0.95,
+            topK: 40,
           },
         }),
       }

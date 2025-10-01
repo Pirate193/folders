@@ -4,12 +4,13 @@ import { useFileStore } from '@/stores/fileStore';
 import { ArrowLeft, Download, ExternalLink } from 'lucide-react';
 import { useParams, useRouter } from 'next/navigation'
 import React, { useEffect } from 'react'
+import PDFViewer from '@/components/pdf-viewer'
 
 function FileViewPage() {
     const params = useParams();
+    const router = useRouter();
     const fileId = params.fileId as string;
     const folderId = params.folderId as string;
-    const router = useRouter();
 
     const {files,fetchFiles}=useFileStore();
     const file = files.find((file)=> file.id === fileId);
@@ -36,10 +37,9 @@ function FileViewPage() {
         switch(file.file_type){
             case 'pdf':
                 return(
-                    <iframe
-                    src={file.file_url}
-                    className='w-full h-[100vh] border rounded-lg'
-                    title={file.file_name}
+                    <PDFViewer 
+                        fileUrl={file.file_url}
+                        fileName={file.file_name}
                     />
                 )
             case 'image':
@@ -89,7 +89,7 @@ function FileViewPage() {
        
       </div>
       {/* file viewer */}
-       <div className=' ' >
+       <div className='mt-4 h-[calc(100vh-100px)]' >
         {renderFileViewer()}
     </div>
     </div>
