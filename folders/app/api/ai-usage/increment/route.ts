@@ -35,10 +35,10 @@ export async function POST(request: NextRequest) {
       count: data,
     });
 
-  } catch (error: any) {
+  } catch (error) {
     console.error('AI usage increment error:', error);
     return NextResponse.json(
-      { error: error.message || 'Failed to increment usage' },
+      { error: 'Failed to increment usage' },
       { status: 500 }
     );
   }

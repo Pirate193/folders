@@ -86,10 +86,10 @@ export async function POST(request: NextRequest) {
       reference: reference,
     });
 
-  } catch (error: any) {
+  } catch (error) {
     console.error('Payment initialization error:', error);
     return NextResponse.json(
-      { error: error.message || 'Failed to initialize payment' },
+      { error:  'Failed to initialize payment' },
       { status: 500 }
     );
   }

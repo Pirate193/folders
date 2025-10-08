@@ -129,7 +129,7 @@ const AIChatSidebar = ({folderId}:{folderId:string}) => {
                 Welcome to your AI Study Assistant
               </h3>
               <p className='text-sm text-muted-foreground' >
-                I'm here to help you with your studies.
+                I&apos;m here to help you with your studies.
               </p>
               <div className='text-xs space-y-1' >
                 <p>.Ask me anything about your folder, notes, and files.</p>

@@ -25,7 +25,7 @@ const NavUser = ({user}:{
    
   const router=useRouter();
   const {isMobile} = useSidebar()
-  const { currentProfile, fetchProfile } = useProfileStore()
+  const {  fetchProfile } = useProfileStore()
   const { fetchSubscription, isPro } = useSubscriptionStore()
   const [accountDialogOpen, setAccountDialogOpen] = useState(false)
   const [pricingDialogOpen, setPricingDialogOpen] = useState(false)

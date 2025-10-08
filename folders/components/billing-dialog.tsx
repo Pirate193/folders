@@ -46,6 +46,7 @@ const BillingDialog = ({ open, onOpenChange }: BillingDialogProps) => {
       toast.success('Subscription cancelled successfully');
       setShowCancelDialog(false);
     } catch (error) {
+      console.log(error)
       toast.error('Failed to cancel subscription');
     } finally {
       setIsCancelling(false);
@@ -132,7 +133,7 @@ const BillingDialog = ({ open, onOpenChange }: BillingDialogProps) => {
                 ) : (
                   <div className="text-center py-4">
                     <p className="text-sm text-muted-foreground mb-4">
-                      You're currently on the free plan
+                      You&apos;re currently on the free plan
                     </p>
                     <Button className="w-full" onClick={() => onOpenChange(false)}>
                       Upgrade to Pro
@@ -224,7 +225,7 @@ const BillingDialog = ({ open, onOpenChange }: BillingDialogProps) => {
           <AlertDialogHeader>
             <AlertDialogTitle>Cancel Subscription?</AlertDialogTitle>
             <AlertDialogDescription>
-              Are you sure you want to cancel your Pro subscription? You'll lose access to all premium features at the end of your billing period.
+              Are you sure you want to cancel your Pro subscription? You&apos;ll lose access to all premium features at the end of your billing period.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>

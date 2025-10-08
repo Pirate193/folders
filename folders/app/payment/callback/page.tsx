@@ -1,14 +1,14 @@
 'use client';
+export const dynamic = 'force-dynamic';
 
-import { useEffect, useState } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useEffect, useState, Suspense } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { useSubscriptionStore } from '@/stores/subscriptionStore';
 import { Loader2, CheckCircle2, XCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 
-export default function PaymentCallback() {
-  const router = useRouter();
+function PaymentCallbackContent() {
   const searchParams = useSearchParams();
   const { verifyPayment } = useSubscriptionStore();
   const [status, setStatus] = useState<'verifying' | 'success' | 'failed'>('verifying');
@@ -60,7 +60,7 @@ export default function PaymentCallback() {
             <XCircle className="h-16 w-16 mx-auto text-red-500" />
             <h1 className="text-2xl font-bold">Payment Failed</h1>
             <p className="text-muted-foreground">
-              We couldn't verify your payment. Please try again or contact support.
+              We couldn&apos;t verify your payment. Please try again or contact support.
             </p>
             <div className="flex gap-4">
               <Button asChild variant="outline" className="flex-1">
@@ -74,5 +74,25 @@ export default function PaymentCallback() {
         )}
       </div>
     </div>
+  );
+}
+
+export default function PaymentCallback() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen flex items-center justify-center p-4">
+          <div className="max-w-md w-full text-center space-y-6">
+            <Loader2 className="h-16 w-16 animate-spin mx-auto text-primary" />
+            <h1 className="text-2xl font-bold">Loading...</h1>
+            <p className="text-muted-foreground">
+              Please wait while we load the payment status
+            </p>
+          </div>
+        </div>
+      }
+    >
+      <PaymentCallbackContent />
+    </Suspense>
   );
 }

@@ -1,7 +1,7 @@
-import { NextRequest, NextResponse } from 'next/server';
+import {  NextResponse } from 'next/server';
 import { createClient } from '@/lib/server';
 
-export async function POST(request: NextRequest) {
+export async function POST() {
   try {
     const supabase = createClient();
     const { data: { user }, error: authError } = await (await supabase).auth.getUser();
@@ -31,10 +31,10 @@ export async function POST(request: NextRequest) {
       message: 'Subscription cancelled successfully',
     });
 
-  } catch (error: any) {
+  } catch (error) {
     console.error('Subscription cancellation error:', error);
     return NextResponse.json(
-      { error: error.message || 'Failed to cancel subscription' },
+      { error: 'Failed to cancel subscription' },
       { status: 500 }
     );
   }
