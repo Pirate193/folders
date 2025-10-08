@@ -129,7 +129,7 @@ const FlashcardCreateDialog = ({ open, onOpenChange, folderId }: FlashcardCreate
 
   return (
     <Dialog open={open} onOpenChange={handleClose}>
-      <DialogContent className="sm:max-w-[600px] max-h-[90vh] overflow-y-auto">
+      <DialogContent className="sm:max-w-[600px] max-h-[calc(100vh-2rem)] overflow-y-auto scrollbar-hidden ">
         <DialogHeader>
           <DialogTitle className="text-2xl font-semibold">Create Flashcard</DialogTitle>
           <DialogDescription>

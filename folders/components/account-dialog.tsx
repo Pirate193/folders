@@ -82,7 +82,7 @@ const AccountDialog = ({open, onOpenChange}: AccountDialogProps) => {
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}  >
-      <DialogContent className="sm:max-w-[500px]  ">
+      <DialogContent className="sm:max-w-[500px] max-h-[calc(100vh-2rem)] overflow-y-auto scrollbar-hidden ">
         <DialogHeader>
           <DialogTitle className="text-2xl font-semibold">Account Settings</DialogTitle>
           <DialogDescription>

@@ -8,6 +8,13 @@ export interface Profile{
     email:string;
     avatar_url:string;
     created_at:string;
+
+    subscription_tier?:'free'|'pro';
+    subscription_status?:'active'|'inactive'|'cancelled'|'expired';
+    subscription_start_date?:string;
+    subscription_end_date?:string;
+    paystack_customer_code?:string;
+    paystack_subscription_code?:string;
 }
 
 interface ProfileState{

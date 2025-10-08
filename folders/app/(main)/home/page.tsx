@@ -51,7 +51,7 @@ export default function Home() {
   }
 
   return (
-    <div className="p-6 space-y-6">
+    <div className="p-6 space-y-6 sm:">
       {/* Welcome Header */}
       <div className="flex items-center justify-between">
         <div>
@@ -265,10 +265,10 @@ export default function Home() {
               <ArrowRight className="h-4 w-4 ml-2" />
             </Button>
           </div>
-          <div className="space-y-2">
+          <div className="space-y-2 ">
             {dueFlashcards.slice(0, 5).map((card) => (
               <Link key={card.id} href={`/folders/${card.folder_id}`}>
-                <Card className="hover:bg-muted/50 transition-colors cursor-pointer">
+                <Card className="hover:bg-muted/50 transition-colors cursor-pointer mb-2">
                   <CardContent className="py-4">
                     <div className="flex items-center justify-between">
                       <div className="flex-1 min-w-0">

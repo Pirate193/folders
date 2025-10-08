@@ -1,5 +1,5 @@
 'use client'
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from './ui/dialog'
 import { Button } from './ui/button'
 import { Input } from './ui/input'
@@ -8,6 +8,10 @@ import { Switch } from './ui/switch'
 import { Loader2, Sparkles, Brain } from 'lucide-react'
 import { toast } from 'sonner'
 import { useFlashcardStore } from '@/stores/flashcardStore'
+import { useAIUsageStore } from '@/stores/aiUsageStore'
+import { useProFeature } from '@/hooks/use-pro-feature'
+import AIUsageBadge from './ai-usage-badge'
+import PricingDialog from './pricing-dialog'
 
 interface FlashcardAIGenerateDialogProps {
   open: boolean
@@ -17,14 +21,30 @@ interface FlashcardAIGenerateDialogProps {
 
 const FlashcardAIGenerateDialog = ({ open, onOpenChange, folderId }: FlashcardAIGenerateDialogProps) => {
   const { fetchFlashcardsByFolder } = useFlashcardStore()
+  const { incrementUsage, canUseFeature, fetchTodayUsage } = useAIUsageStore()
+  const { isPro } = useProFeature()
   const [topic, setTopic] = useState('')
   const [description, setDescription] = useState('')
   const [isMultipleChoice, setIsMultipleChoice] = useState(true)
   const [numberOfOptions, setNumberOfOptions] = useState(4)
   const [numberOfFlashcards, setNumberOfFlashcards] = useState(5)
   const [isGenerating, setIsGenerating] = useState(false)
+  const [showPricing, setShowPricing] = useState(false)
+
+  useEffect(() => {
+    if (open) {
+      fetchTodayUsage()
+    }
+  }, [open, fetchTodayUsage])
 
   const handleGenerate = async () => {
+    // Check usage limits first
+    if (!canUseFeature('flashcard_generation', isPro)) {
+      toast.error('Daily limit reached! Upgrade to Pro for unlimited AI generation.')
+      setShowPricing(true)
+      return
+    }
+
     // Validation
     if (!topic.trim()) {
       toast.error('Please enter a topic')
@@ -43,6 +63,13 @@ const FlashcardAIGenerateDialog = ({ open, onOpenChange, folderId }: FlashcardAI
 
     setIsGenerating(true)
     try {
+      // Increment usage first
+      const incremented = await incrementUsage('flashcard_generation')
+      if (!incremented && !isPro) {
+        toast.error('Failed to track usage. Please try again.')
+        setIsGenerating(false)
+        return
+      }
       const response = await fetch('/api/flashcards/generate', {
         method: 'POST',
         headers: {
@@ -91,12 +118,15 @@ const FlashcardAIGenerateDialog = ({ open, onOpenChange, folderId }: FlashcardAI
 
   return (
     <Dialog open={open} onOpenChange={handleClose}>
-      <DialogContent className="sm:max-w-[500px] h-[600px] overflow-y-auto ">
+      <DialogContent className="sm:max-w-[500px] max-h-[calc(100vh-2rem)] overflow-y-auto scrollbar-hidden ">
         <DialogHeader>
-          <DialogTitle className="flex items-center gap-2 text-2xl font-semibold">
-            <Sparkles className="h-6 w-6 text-primary" />
-            AI Flashcard Generator
-          </DialogTitle>
+          <div className="flex items-center justify-between">
+            <DialogTitle className="flex items-center gap-2 text-2xl font-semibold">
+              <Sparkles className="h-6 w-6 text-primary" />
+              AI Flashcard Generator
+            </DialogTitle>
+            <AIUsageBadge featureType="flashcard_generation" />
+          </div>
           <DialogDescription>
             Let AI create flashcards for you based on any topic
           </DialogDescription>
@@ -234,6 +264,7 @@ const FlashcardAIGenerateDialog = ({ open, onOpenChange, folderId }: FlashcardAI
           </Button>
         </DialogFooter>
       </DialogContent>
+      <PricingDialog open={showPricing} onOpenChange={setShowPricing} />
     </Dialog>
   )
 }

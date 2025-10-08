@@ -1,11 +1,19 @@
 'use client'
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { SidebarMenu, SidebarMenuButton, SidebarMenuItem, useSidebar } from './ui/sidebar'
 import { DropdownMenu, DropdownMenuTrigger } from '@radix-ui/react-dropdown-menu'
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar'
-import { BadgeCheck, Bell, ChevronsUpDown, CreditCard, LogOut, Sparkles } from 'lucide-react'
+import { BadgeCheck, Bell, ChevronsUpDown, CreditCard, LogOut, Sparkles, Crown } from 'lucide-react'
 import { DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator } from './ui/dropdown-menu'
+import { Badge } from './ui/badge'
 import AccountDialog from './account-dialog'
+import BillingDialog from './billing-dialog'
+import { createClient } from '@/lib/client'
+import { toast } from 'sonner'
+import { useRouter } from 'next/navigation'
+import PricingDialog from './pricing-dialog'
+import { useProfileStore } from '@/stores/profileStore'
+import { useSubscriptionStore } from '@/stores/subscriptionStore'
 
 const NavUser = ({user}:{
     user:{
@@ -14,8 +22,36 @@ const NavUser = ({user}:{
         avatar_url:string
     }
 }) => {
-    const {isMobile} = useSidebar()
-    const [accountDialogOpen, setAccountDialogOpen] = useState(false)
+   
+  const router=useRouter();
+  const {isMobile} = useSidebar()
+  const { currentProfile, fetchProfile } = useProfileStore()
+  const { fetchSubscription, isPro } = useSubscriptionStore()
+  const [accountDialogOpen, setAccountDialogOpen] = useState(false)
+  const [pricingDialogOpen, setPricingDialogOpen] = useState(false)
+  const [billingDialogOpen, setBillingDialogOpen] = useState(false)
+
+  useEffect(() => {
+    fetchProfile()
+    fetchSubscription()
+  }, [fetchProfile, fetchSubscription])
+
+  const isProUser = isPro()
+    const signOut =async()=>{
+      const supabase = createClient()
+      try{
+        const {error}= await supabase.auth.signOut()
+        if(error){
+          throw error
+        }
+        toast.success('signed out successfully')
+        router.push('/')
+      
+      }catch(error){  
+        toast.error('error signing out')
+        console.error(error)
+      }
+    }
   return (
     <SidebarMenu>
     <SidebarMenuItem>
@@ -30,7 +66,15 @@ const NavUser = ({user}:{
               <AvatarFallback className="rounded-lg">CN</AvatarFallback>
             </Avatar>
             <div className="grid flex-1 text-left text-sm leading-tight">
-              <span className="truncate font-medium">{user.username}</span>
+              <div className="flex items-center gap-2">
+                <span className="truncate font-medium">{user.username}</span>
+                {isProUser && (
+                  <Badge variant="secondary" className="h-4 px-1 text-[10px]">
+                    <Crown className="h-2.5 w-2.5 mr-0.5" />
+                    PRO
+                  </Badge>
+                )}
+              </div>
               <span className="truncate text-xs">{user.email}</span>
             </div>
             <ChevronsUpDown className="ml-auto size-4" />
@@ -49,25 +93,38 @@ const NavUser = ({user}:{
                 <AvatarFallback className="rounded-lg">CN</AvatarFallback>
               </Avatar>
               <div className="grid flex-1 text-left text-sm leading-tight">
-                <span className="truncate font-medium">{user.username}</span>
+                <div className="flex items-center gap-2">
+                  <span className="truncate font-medium">{user.username}</span>
+                  {isProUser && (
+                    <Badge variant="secondary" className="h-4 px-1 text-[10px]">
+                      <Crown className="h-2.5 w-2.5 mr-0.5" />
+                      PRO
+                    </Badge>
+                  )}
+                </div>
                 <span className="truncate text-xs">{user.email}</span>
               </div>
             </div>
           </DropdownMenuLabel>
           <DropdownMenuSeparator />
-          <DropdownMenuGroup>
-            <DropdownMenuItem>
-              <Sparkles />
-              Upgrade to Pro
-            </DropdownMenuItem>
-          </DropdownMenuGroup>
+          {!isProUser && (
+            <>
+              <DropdownMenuGroup>
+                <DropdownMenuItem onClick={()=>setPricingDialogOpen(true)}>
+                  <Sparkles />
+                  Upgrade to Pro
+                </DropdownMenuItem>
+              </DropdownMenuGroup>
+              <DropdownMenuSeparator />
+            </>
+          )}
           <DropdownMenuSeparator />
           <DropdownMenuGroup>
             <DropdownMenuItem onClick={() => setAccountDialogOpen(true)}>
               <BadgeCheck />
               Account
             </DropdownMenuItem>
-            <DropdownMenuItem>
+            <DropdownMenuItem onClick={() => setBillingDialogOpen(true)}>
               <CreditCard />
               Billing
             </DropdownMenuItem>
@@ -77,7 +134,7 @@ const NavUser = ({user}:{
             </DropdownMenuItem>
           </DropdownMenuGroup>
           <DropdownMenuSeparator />
-          <DropdownMenuItem>
+          <DropdownMenuItem onClick={()=>signOut()}>
             <LogOut />
             Log out
           </DropdownMenuItem>
@@ -85,6 +142,8 @@ const NavUser = ({user}:{
       </DropdownMenu>
     </SidebarMenuItem>
     <AccountDialog open={accountDialogOpen} onOpenChange={setAccountDialogOpen} />
+    <PricingDialog open={pricingDialogOpen} onOpenChange={setPricingDialogOpen} />
+    <BillingDialog open={billingDialogOpen} onOpenChange={setBillingDialogOpen} />
   </SidebarMenu>
   )
 }
